@@ -123,6 +123,7 @@ void CHyprDwindleLayout::applyNodeDataToWindow(SDwindleNodeData* pNode, bool for
     static auto* const PGAPSIN         = &g_pConfigManager->getConfigValuePtr("general:gaps_in")->intValue;
     static auto* const PGAPSOUT        = &g_pConfigManager->getConfigValuePtr("general:gaps_out")->intValue;
     static auto* const PNOGAPSWHENONLY = &g_pConfigManager->getConfigValuePtr("dwindle:no_gaps_when_only")->intValue;
+    static auto* const PNOGAPSWHENONLY = &g_pConfigManager->getConfigValuePtr("dwindle:no_borders_when_only")->intValue;
 
     auto               gapsIn  = WORKSPACERULE.gapsIn.value_or(*PGAPSIN);
     auto               gapsOut = WORKSPACERULE.gapsOut.value_or(*PGAPSOUT);
@@ -144,7 +145,7 @@ void CHyprDwindleLayout::applyNodeDataToWindow(SDwindleNodeData* pNode, bool for
     if (*PNOGAPSWHENONLY && !g_pCompositor->isWorkspaceSpecial(PWINDOW->m_iWorkspaceID) &&
         (NODESONWORKSPACE == 1 || (PWINDOW->m_bIsFullscreen && g_pCompositor->getWorkspaceByID(PWINDOW->m_iWorkspaceID)->m_efFullscreenMode == FULLSCREEN_MAXIMIZED))) {
 
-        PWINDOW->m_sSpecialRenderData.border   = WORKSPACERULE.border.value_or(*PNOGAPSWHENONLY == 2);
+        PWINDOW->m_sSpecialRenderData.border   = WORKSPACERULE.border.value_or(*PNOGAPSWHENONLY == 2 || *PNOBORDERSWHENONLY == 1);
         PWINDOW->m_sSpecialRenderData.decorate = WORKSPACERULE.decorate.value_or(true);
         PWINDOW->m_sSpecialRenderData.rounding = false;
         PWINDOW->m_sSpecialRenderData.shadow   = false;
